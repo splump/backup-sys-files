@@ -1,0 +1,3 @@
+# Put absolute paths to files you want to backup in this file
+# Comments and blank lines will be ignored
+# Entire folders can not be backed up with this tool at this moment, specify files individually
