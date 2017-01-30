@@ -55,5 +55,5 @@ while true; do
 			fi
 		fi
 	done < $FILELIST
-	sleep 10
+	sleep 300
 done
