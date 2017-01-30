@@ -2,7 +2,6 @@
 A scripted solution to backing up important configuration files. The script is deployed with systemd and since it will need read access to your important files, you will need to run it as root.
 
 # IMPORTANT:
-
 Restore script is not yet finished. Feel free to tinker with it, but don't blame me if it does not work as expected or does anything weird to your files..
 
 # Installing
