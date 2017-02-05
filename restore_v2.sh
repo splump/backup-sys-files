@@ -79,19 +79,23 @@ showFileList () {
 	if [[ $BACKUPS_CHANGED -eq 0 ]]; then
 		echo "No changes found in $BACKUPS_FOUND files, exiting"
 		exit 0
+	else
+		echo "Found $BACKUPS_CHANGED files with differing content"
 	fi
 } 
 
 # Function to replace original with backupfile
 replaceOrigFile () {
+	# Ask user to confirm that we really want to replace the original with chosen backup
 	printf '\e[A\e[K'
 	echo -e "Really replace?"
 	echo -e "${RED}---${NC} $ORIGFILE"
 	echo -e "with"
 	echo -e "${GREEN}+++${NC} $BACKUPFILE\n"
+	
 	echo -en "Answer (y)es, or any other key will abort: "
 
-	# Ask user for confirmation to replace original file with backup
+	# Put answer in variable ANSWER, and check if it is a yes
 	read ANSWER
 	if [[ $ANSWER == "y" ]]; then
 		# Reset counter to nothing
@@ -99,7 +103,8 @@ replaceOrigFile () {
 		# Run this loop as long as ORIGBACKUP is empty
 		while [ -z $ORIGBACKUP ]; do
 			# Check if original file already has a backup, iterate until it doesn't
-			if [ -d "$ORIGFILE.bak$COUNTER" ]; then
+			if [ -f "$ORIGFILE.bak$COUNTER" ]; then
+				# Increment COUNTER and try again
 				let	COUNTER=COUNTER+1
 			else
 				# Set ORIGBACKUP to ORIGFILE.bak+number that is not already taken
@@ -107,38 +112,42 @@ replaceOrigFile () {
 			fi	
 		done
 		
-		echo "mv $ORIGFILE $ORIGBACKUP"
-		echo "mv $BACKUPFILE $ORIGFILE"
-		echo "rm $PATHFILE" 
-			
+		# Some debug output, these are the commands that will run
+		echo -e "\n---"
+		echo -e "${RED}DEBUG: mv $ORIGFILE $ORIGBACKUP ${NC}"
+		echo -e "${RED}DEBUG: mv $BACKUPFILE $ORIGFILE ${NC}"
+		echo -e "${RED}DEBUG: rm $PATHFILE ${NC}" 
+		echo -e "---"
+		echo -e "\nA backup of original has been saved to $ORIGBACKUP"	
+	
+		# Check if the folder for the backup is empty
 		if [[ "$(ls $BACKUPFOLDER)" ]]; then
 			echo "$BACKUPFOLDER contains other backups, not removing"
 		else
+			# If it is empty, remove it
 			echo "BACKUPFOLDER is empty, removing it"
 			echo "rm -rf $BACKUPFOLDER"
 		fi
 		
-		echo -e "\nA backup of original has been saved to $ORIGBACKUP"	
-
+		# Exit script, we're done here
+		exit 0
 	else
+		# Aborting replace, going back to file list
 		echo -e "Aborting\n"
 		continue
 	fi
-
+}
 
 # Make answers non case sensitive
 shopt -s nocasematch
 
 # Show our files by calling our function showFileList
 while true; do
-	clear	
-	
 	# Show us the backups which contain differences from original by calling on our function showFileList
-	echo -en "Found the following backups with differing content:\n\n"
 	showFileList
 	
 	# Ask user for which backup to diff, and put answer in variable CHOICE
-	echo -en "\nWhich file do you want to see a diff of? (enter number or (q)uit):"	
+	echo -en "\nWhich file do you want to see a diff of? (enter number or (q)uit): "	
 	read CHOICE
 		
 	# Exit script if user input equals q
@@ -180,5 +189,3 @@ while true; do
 			esac
 	fi
 done
-
-		
