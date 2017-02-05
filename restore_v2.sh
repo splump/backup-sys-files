@@ -3,13 +3,13 @@
 # This script has a dependency on colordiff. Either install it or change the DIFF variable to regular diff.
 #
 
-# Check that we are running as root
+# Check that we are running as root, if we aren't then exit and show a message
 if [[ "$(whoami)" != "root" ]]; then
 	echo "You need to run this script as root"
 	exit 1
 fi
 
-# Check that we are running the script correctly
+# Check that we are running the script correctly, if we aren't then then exit and show a message
 if [[ $# -ne 1 ]]; then
 	echo "Usage: restore <filename>"
 	exit 1
@@ -31,7 +31,7 @@ SEARCHRESULT="$(find $BACKUPREPO -type f -name $FILENAME -printf '%T@ %p\n' | so
 # Check that we can actually find what is being asked for in the backup repo, otherwise exit with a message
 if [[ -z $SEARCHRESULT ]]; then
 	echo "Backup of $FILENAME was not found in $BACKUPREPO"
-	exit 0
+	exit 1
 fi
 
 
