@@ -5,8 +5,6 @@ HOST="$(hostname)"
 FILELIST="/etc/backup-sys-files/filelist"
 BACKUPREPO="/hive/backup/$HOST"
 
-# Don't set a stupid DATE variable because bash reasons
-
 ## Check that we are running as root
 #if [ "$(whoami)" != "root" ]; then
 #	echo "You need to run this script with sudo"

@@ -5,5 +5,5 @@ cp ./backup-sys-files.d /usr/sbin/
 echo "Installing systemd service file to /usr/lib/systemd/system/backup-sys-files.service"
 cp ./backup-sys-files.service /usr/lib/systemd/system/
 echo "Running systemctl daemon-reload"
-echo "systemctl daemon-reload"
+systemctl daemon-reload
 echo "Start the daemon by running: systemctl start backup-sys-files"
