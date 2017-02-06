@@ -9,6 +9,8 @@ Included is a script to install the necessary files. Inspect the script in order
 > ./INSTALL.sh
 
 # Configuration
+IMPORTANT: Before actually running the service, modify the /usr/sbin/backup-sys-files.d and /usr/sbin/restore variables to point the BACKUPREPO variable to where you want to store the backups.
+
 The install script will put a configuration file in /etc/backup-sys-files with the name filelist. Put in absolute paths to specific important files you wish to backup. Don't put in relative paths or folders. Comments and empty lines will be ignored.
 
 # Running
