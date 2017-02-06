@@ -121,7 +121,7 @@ replaceOrigFile () {
 		echo -e "\nA backup of original has been saved to $ORIGBACKUP"	
 	
 		# Check if the folder for the backup is empty
-		if [[ "$(ls $BACKUPFOLDER)" ]]; then
+		if ls $BACKUPFOLDER > /dev/null 2>&1; then
 			echo "$BACKUPFOLDER contains other backups, not removing"
 		else
 			# If it is empty, remove it
@@ -144,6 +144,7 @@ shopt -s nocasematch
 # Show our files by calling our function showFileList
 while true; do
 	# Show us the backups which contain differences from original by calling on our function showFileList
+	clear
 	showFileList
 	
 	# Ask user for which backup to diff, and put answer in variable CHOICE
@@ -174,7 +175,7 @@ while true; do
 		# Put the path to the corresponding path file in PATHFILE
 		PATHFILE=${PATHFILES[$CHOICE]}
 		# Show a diff between the chosen backup and original file
-	    echo ""
+		echo ""
 		$DIFF -Naur $ORIGFILE $BACKUPFILE
 		
 		# Ask user for action to be taken
