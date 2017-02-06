@@ -8,4 +8,5 @@ echo "Installing systemd service file to /usr/lib/systemd/system/backup-sys-file
 cp ./backup-sys-files.service /usr/lib/systemd/system/
 echo "Running systemctl daemon-reload"
 systemctl daemon-reload
-echo "Start the daemon by running: systemctl start backup-sys-files"
+echo "FIRST, edit the /usr/sbin/backup-sys-files and /usr/sbin/restore.sh BACKUPREPO variables to where you want to store your backups."
+echo "Then start the daemon by running: systemctl start backup-sys-files"
