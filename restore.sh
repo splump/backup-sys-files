@@ -48,12 +48,12 @@ BACKUPS_FOUND=0
 while read LINE; do
 	# Array to contain the files found
 	BACKUPS+=("$LINE")
-	# Variable to contain the folder the file resides in 
+	# Variable to contain the folder the file resides in
 	BACKUPDIR="$(dirname $LINE)"
 	# Array to contain the originating source path for all backups found
 	PATHFILES+=("$BACKUPDIR/.$FILENAME.path")
 	# Increment BACKUPS_FOUND by one for each found backup
-	let BACKUPS_FOUND=BACKUPS_FOUND+1 
+	let BACKUPS_FOUND=BACKUPS_FOUND+1
 done <<< "$SEARCHRESULT"
 
 
@@ -82,7 +82,7 @@ showFileList () {
 	else
 		echo "Found $BACKUPS_CHANGED files with differing content"
 	fi
-} 
+}
 
 # Function to replace original with backupfile
 replaceOrigFile () {
@@ -92,7 +92,7 @@ replaceOrigFile () {
 	echo -e "${RED}---${NC} $ORIGFILE"
 	echo -e "with"
 	echo -e "${GREEN}+++${NC} $BACKUPFILE\n"
-	
+
 	echo -en "Answer (y)es, or any other key will abort: "
 
 	# Put answer in variable ANSWER, and check if it is a yes
@@ -109,17 +109,17 @@ replaceOrigFile () {
 			else
 				# Set ORIGBACKUP to ORIGFILE.bak+number that is not already taken
 				ORIGBACKUP="$ORIGFILE.bak$COUNTER"
-			fi	
+			fi
 		done
-		
+
 		# Some debug output, these are the commands that will run
 		echo -e "\n---"
 		echo -e "${RED}DEBUG: mv $ORIGFILE $ORIGBACKUP ${NC}"
 		echo -e "${RED}DEBUG: mv $BACKUPFILE $ORIGFILE ${NC}"
-		echo -e "${RED}DEBUG: rm $PATHFILE ${NC}" 
+		echo -e "${RED}DEBUG: rm $PATHFILE ${NC}"
 		echo -e "---"
-		echo -e "\nA backup of original has been saved to $ORIGBACKUP"	
-	
+		echo -e "\nA backup of original has been saved to $ORIGBACKUP"
+
 		# Check if the folder for the backup is empty
 		if ls $BACKUPFOLDER > /dev/null 2>&1; then
 			echo "$BACKUPFOLDER contains other backups, not removing"
@@ -128,7 +128,7 @@ replaceOrigFile () {
 			echo "BACKUPFOLDER is empty, removing it"
 			echo "rm -rf $BACKUPFOLDER"
 		fi
-		
+
 		# Exit script, we're done here
 		exit 0
 	else
@@ -146,17 +146,17 @@ while true; do
 	# Show us the backups which contain differences from original by calling on our function showFileList
 	clear
 	showFileList
-	
+
 	# Ask user for which backup to diff, and put answer in variable CHOICE
-	echo -en "\nWhich file do you want to see a diff of? (enter number or (q)uit): "	
+	echo -en "\nWhich file do you want to see a diff of? (enter number or (q)uit): "
 	read CHOICE
-		
+
 	# Exit script if user input equals q
 	if [[ $CHOICE == "q" ]]; then
 		echo "Quitting.."
 		exit 0
 	# Only allow for numbers to be valid choices
-	elif [[ ! "$CHOICE" =~ ^[0-9]*$ ]] ; then 
+	elif [[ ! "$CHOICE" =~ ^[0-9]*$ ]] ; then
 		echo "Only valid input is numbers or (q)uit"
 		sleep 2
 		continue
@@ -165,7 +165,7 @@ while true; do
 		echo "Please input a number between 1 and $BACKUPS_CHANGED"
 		sleep 2
 		continue
-	else 
+	else
 		# Put the chosen backup in variable BACKUPFILE
 		BACKUPFILE=${BACKUPS[$CHOICE]}
 		# Put the folder of chosen backup file in variable BACKUPFOLDER
@@ -177,14 +177,14 @@ while true; do
 		# Show a diff between the chosen backup and original file
 		echo ""
 		$DIFF -Naur $ORIGFILE $BACKUPFILE
-		
+
 		# Ask user for action to be taken
 		echo -en "\n(R)eplace file with backup? (Any other key will return to list of backups): "
 		read ACTION
 			case "$ACTION" in
 				r) replaceOrigFile
 				;;
-				
+
 				*) echo ""
 				;;
 			esac
